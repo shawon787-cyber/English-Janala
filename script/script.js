@@ -1,16 +1,66 @@
+const createElements = (arr) =>{
+    const htmlElements = arr.map(el => `<span class="btn">${el}</span>`)
+    return (htmlElements.join(" "));   
+}
+
+
 const loadLessons = () =>{
     fetch("https://openapi.programming-hero.com/api/levels/all")
     .then((res) => res.json())
     .then((json) => displayLessons(json.data))
 };
+const removeActive =()=>{
+    const lessonButtons = document.querySelectorAll(".lesson-btn");
+    // console.log(lessonButtons);
+    lessonButtons.forEach(btn => btn.classList.remove("active"))
+    
+}
 const loadLevelWord = (id) =>{
     // console.log(id);
     const url = `https://openapi.programming-hero.com/api/level/${id}`;
     // console.log(url);
     fetch(url)
     .then(res => res.json())
-    .then(data => displayLevelWord(data.data))
+    .then(data => {
+        removeActive();
+        const clickBtn = document.getElementById(`lesson-btn-${id}`);
+        // console.log(clickBtn)
+        clickBtn.classList.add("active");
+        displayLevelWord(data.data)
+    })
 }
+
+const loadWordDetail = async(id)=>{
+    const url = `https://openapi.programming-hero.com/api/word/${id}`;
+    console.log(id);
+    const res = await fetch(url);
+    const details = await res.json();
+    displayWordDetails(details.data)
+};
+const displayWordDetails =(word)=>{
+    console.log(word)
+    const detailsBox = document.getElementById("details-container");
+    detailsBox.innerHTML = `
+     <div class="">
+        <h2 class="text-2xl font-bold">${word.word} <i class="fa-solid fa-microphone-lines"></i> ${word.pronunciation}</h2>
+        
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-600">Meaning</h2>
+        <p> ${word.meaning}</p>
+      </div>
+      <div class="">
+        <h2 class="font-bold text-gray-600">Example</h2>
+        <p>${word.sentence}</p>
+      </div>
+      <div class="">
+        <h2 class="font-bold text-gray-600">Synonyms</h2>
+        <div class="">${createElements(word.synonyms)}</div>
+      </div>
+    `;
+    document.getElementById("word_modal").showModal();
+}
+
 const displayLevelWord = (words) =>{
     const wordContainer = document.getElementById("word-container");
     wordContainer.innerHTML = "";
@@ -35,7 +85,7 @@ const displayLevelWord = (words) =>{
       <p class="font-semibold text-sm my-2 text-gray-600">Meaning/ Pronounciation</p>
       <div class="font-bangla text-xl font-semibold">${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি"} / ${word. pronunciation ? word. pronunciation: "Prounounciation পাওয়া যায়নি"}</div>
       <div class="flex justify-between items-center mt-6">
-        <button class="btn bg-sky-50"><i class="fa-solid fa-circle-info"></i></button>
+        <button onclick="loadWordDetail(${word.id})" class="btn bg-sky-50"><i class="fa-solid fa-circle-info"></i></button>
         <button class="btn bg-sky-50"><i class="fa-solid fa-volume-high"></i></button>
       </div>
     </div>
@@ -54,7 +104,7 @@ const displayLessons = (lessons) =>{
         // 3. create element
         const btnDiv = document.createElement("div");
         btnDiv.innerHTML = `
-        <button onclick = "loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary">
+        <button id="lesson-btn-${lesson.level_no}" onclick = "loadLevelWord(${lesson.level_no})" class="btn btn-outline btn-primary lesson-btn">
             <i class="fa-solid fa-book-open"></i> Lesson - ${lesson.level_no}
           </button>
         `
