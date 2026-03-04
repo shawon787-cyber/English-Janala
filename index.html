@@ -131,6 +131,18 @@
   </section>
 </header>
 <main>
+  <section class="flex justify-center my-10">
+    <div class="join">
+  <div>
+    <label class="input validator join-item">
+     
+      <input id="input-search" type="text" placeholder="Search vocabulary now" required />
+    </label>
+    
+  </div>
+  <button id="btn-search" class="btn btn-primary join-item">Search</button>
+</div>
+  </section>
   <section class="mb-10 ">
     <h2 class="text-4xl font-bold mb-5 text-center"><span class="text-sky-400">Let's</span> Learn Vocabularies</h2>
     <!-- button div -->
@@ -138,6 +150,11 @@
 
      </div>
   </section>
+
+  <section id="spinner" class="flex justify-center items-center py-10 hidden">
+    <span class="loading loading-bars loading-xl"></span>
+  </section>
+
   <section class="px-3">
     <div id="word-container" class="bg-gray-100 p-8 max-w-7xl mx-auto mb-10 grid grid-cols-3 gap-5 rounded-xl">  
 
