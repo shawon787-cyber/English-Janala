@@ -71,7 +71,7 @@ const displayWordDetails =(word)=>{
       </div>
       <div class="">
         <h2 class="font-bold text-gray-600">Synonyms</h2>
-        <div class="">${createElements(word.synonyms)}</div>
+        <div class="mt-3">${createElements(word.synonyms)}</div>
       </div>
     `;
     document.getElementById("word_modal").showModal();
